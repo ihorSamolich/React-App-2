@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(255)
+  description    String    @db.VarChar(4000)
+  dueDate        DateTime  @db.Timestamptz()
+  priority       Priority  @relation(fields: [priorityId], references: [id])
+  priorityId     Int
+  list           List      @relation(fields: [listId], references: [id])
+  listId         Int
+}
+
+model List {
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(255) @unique
+  tasks          Task[]
+}
+
+model Priority {
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(255)
+  value          Int       @db.Integer @unique
+  tasks          Task[]
+}
