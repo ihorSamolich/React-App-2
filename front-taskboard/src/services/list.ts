@@ -5,11 +5,42 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const listApi = createApi({
   reducerPath: 'listApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/api/` }),
+  tagTypes: ['Lists'],
   endpoints: builder => ({
     getLists: builder.query<IList[], void>({
       query: () => '/list',
+      providesTags: ['Lists'],
+    }),
+    addList: builder.mutation({
+      query: (newList: { name: string }) => ({
+        url: '/list',
+        method: 'POST',
+        body: newList,
+      }),
+      invalidatesTags: ['Lists'],
+    }),
+    updateList: builder.mutation({
+      query: (updatedList: { id: number; name: string }) => ({
+        url: `/list/${updatedList.id}`,
+        method: 'PATCH',
+        body: updatedList,
+      }),
+      invalidatesTags: ['Lists'],
+    }),
+    deleteList: builder.mutation({
+      query: ({ id }) => ({
+        url: `/list/${id}`,
+        method: 'DELETE',
+        body: id,
+      }),
+      invalidatesTags: ['Lists'],
     }),
   }),
 });
 
-export const { useGetListsQuery } = listApi;
+export const {
+  useGetListsQuery,
+  useUpdateListMutation,
+  useAddListMutation,
+  useDeleteListMutation,
+} = listApi;

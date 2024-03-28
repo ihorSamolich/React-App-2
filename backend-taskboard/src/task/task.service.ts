@@ -29,6 +29,7 @@ export class TaskService {
   }
 
   async findAll() {
+    console.log('service');
     try {
       return await this.prisma.task.findMany({
         include: { priority: true },
@@ -78,6 +79,6 @@ export class TaskService {
 
     await this.prisma.task.delete({ where: { id } });
 
-    return `Task with id ${id} has been successfully deleted`;
+    return { message: `Task with id ${id} has been successfully deleted` };
   }
 }

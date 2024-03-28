@@ -32,6 +32,7 @@ export class ListService {
           tasks: {
             include: {
               priority: true,
+              list: true,
             },
           },
         },
@@ -69,11 +70,21 @@ export class ListService {
     if (!existingList) {
       throw new NotFoundException();
     }
-    await this.prisma.list.delete({
+
+    const deleteTasks = this.prisma.task.deleteMany({
+      where: {
+        listId: id,
+      },
+    });
+
+    const deleteList = this.prisma.list.delete({
       where: {
         id: id,
       },
     });
+
+    await this.prisma.$transaction([deleteTasks, deleteList]);
+
     return `List with id ${id} has been successfully deleted`;
   }
 

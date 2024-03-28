@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePriorityDto } from './dto/create-priority.dto';
 import { UpdatePriorityDto } from './dto/update-priority.dto';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class PriorityService {
-  create(createPriorityDto: CreatePriorityDto) {
-    return 'This action adds a new priority';
-  }
+  constructor(private prisma: PrismaService) {}
 
   findAll() {
-    return `This action returns all priority`;
+    return this.prisma.priority.findMany();
+  }
+
+  create(createPriorityDto: CreatePriorityDto) {
+    return 'This action adds a new priority';
   }
 
   findOne(id: number) {
