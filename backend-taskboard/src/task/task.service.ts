@@ -77,8 +77,17 @@ export class TaskService {
       throw new NotFoundException(`Task with id ${id} not found`);
     }
 
+    await this.prisma.history.updateMany({
+      where: {
+        taskId: id,
+      },
+      data: {
+        taskId: null,
+      },
+    });
+
     await this.prisma.task.delete({ where: { id } });
 
-    return { message: `Task with id ${id} has been successfully deleted` };
+    return existingTask;
   }
 }

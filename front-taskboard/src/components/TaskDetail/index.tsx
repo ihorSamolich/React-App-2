@@ -1,7 +1,10 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { dateConvert } from '../../utils/dateConvert.ts';
 import { ITask } from '../../interfaces/task.ts';
+import { useFetchHistoryByTaskQuery } from '../../services/history.ts';
+import TaskEdit from '../TaskEdit';
+import { dateConvertWithTime } from '../../utils/dateConvertWithTime.ts';
 
 interface TaskDetailProps {
   task: ITask;
@@ -10,6 +13,8 @@ interface TaskDetailProps {
 }
 
 const TaskDetail: React.FC<TaskDetailProps> = ({ task, isOpen, setIsOpen }) => {
+  const [isTaskEditOpen, setIsTaskEditOpen] = useState(false);
+  const { data } = useFetchHistoryByTaskQuery(task.id);
   const cancelButtonRef = useRef(null);
 
   return (
@@ -71,7 +76,10 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task, isOpen, setIsOpen }) => {
                     <div className="max-w-2xl mx-auto p-5">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold">{task.name}</h2>
-                        <button className="px-3 text-black bg-white rounded-md border border-black text-sm hover:bg-gray-200">
+                        <button
+                          onClick={() => setIsTaskEditOpen(true)}
+                          className="px-3 text-black bg-white rounded-md border border-black text-sm hover:bg-gray-200"
+                        >
                           <div className="flex items-center">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +138,6 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task, isOpen, setIsOpen }) => {
                                 d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
                               />
                             </svg>
-
                             <h3 className="w-1/2 text-sm text-gray-600 text-nowrap">
                               Data due
                             </h3>
@@ -158,12 +165,10 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task, isOpen, setIsOpen }) => {
                                 d="M6 6h.008v.008H6V6Z"
                               />
                             </svg>
-
                             <h3 className="w-1/2 text-sm text-gray-600">
                               Priority
                             </h3>
                           </div>
-
                           <p className="w-1/2">{task.priority.name}</p>
                         </div>
                       </div>
@@ -177,13 +182,32 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task, isOpen, setIsOpen }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="hidden sm:block col-span-1 bg-gray-400 p-4">
-                    History
+                  <div className="hidden sm:block col-span-1 bg-gray-300 p-4">
+                    <h1 className="font-bold">Activity</h1>
+                    {data?.map(item => (
+                      <ul key={item.id} className="px-4 py-1">
+                        <li className="grid grid-cols-5">
+                          <p className="col-span-3 tracking-wide text-xs text-gray-500 font-semibold">
+                            {item.body.replace(`●${task.name}`, 'this')}
+                          </p>
+                          <p className="ps-5 col-span-2 text-xs text-gray-500">
+                            {dateConvertWithTime(item.date)}
+                          </p>
+                        </li>
+                      </ul>
+                    ))}
                   </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
+          {isTaskEditOpen && (
+            <TaskEdit
+              isOpen={isTaskEditOpen}
+              setIsOpen={setIsTaskEditOpen}
+              task={task}
+            />
+          )}
         </div>
       </Dialog>
     </Transition.Root>

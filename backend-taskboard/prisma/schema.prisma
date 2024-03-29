@@ -22,6 +22,7 @@ model Task {
   priorityId     Int
   list           List      @relation(fields: [listId], references: [id])
   listId         Int
+  history        History[]
 }
 
 model List {
@@ -35,4 +36,12 @@ model Priority {
   name           String    @db.VarChar(255)
   value          Int       @db.Integer @unique
   tasks          Task[]
+}
+
+model History {
+  id             Int       @id @default(autoincrement())
+  body           String    @db.VarChar(4000)
+  date           DateTime  @db.Timestamptz()
+  task           Task?     @relation(fields: [taskId], references: [id])
+  taskId         Int?
 }

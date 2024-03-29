@@ -11,10 +11,6 @@ const TaskBoardPage: React.FC = () => {
       <main>
         <ListGrid />
       </main>
-      {/*<CreateList*/}
-      {/*  isOpen={isCreateListOpen}*/}
-      {/*  onClose={() => setIsCreateListOpen(false)}*/}
-      {/*/>*/}
     </>
   );
 };

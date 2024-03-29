@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICreateTask, ITask, IUpdateTask } from '../interfaces/task.ts';
 import { listApi } from './list.ts';
+import { historyApi } from './history.ts';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const taskApi = createApi({
@@ -43,6 +44,7 @@ export const taskApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         await queryFulfilled;
         dispatch(listApi.util.invalidateTags(['Lists']));
+        dispatch(historyApi.util.invalidateTags(['History']));
       },
     }),
 

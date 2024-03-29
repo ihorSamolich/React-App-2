@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAddListMutation } from '../../services/list.ts';
 import Notification from '../Notification';
+import History from '../History';
 
 const PageHeader: React.FC = () => {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [textNotification, setTextNotification] = useState<string>('');
   const [resultNotification, setResultNotification] = useState<boolean>(false);
-
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const inputNameRef = useRef<HTMLInputElement>(null);
   const [addList] = useAddListMutation();
 
@@ -51,14 +52,14 @@ const PageHeader: React.FC = () => {
 
   return (
     <div className="sm:flex items-center justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      {showNotification && (
-        <Notification content={textNotification} result={resultNotification} />
-      )}
       <h1 className="text-2xl font-bold tracking-tight mb-2 sm:mb-0 text-gray-900">
         My Task Board
       </h1>
       <div className="sm:flex justify-center sm:w-auto gap-2 ">
-        <button className="flex items-center mb-2 sm:mb-0 justify-center w-full gap-1 sm:w-auto border border-gray-200 rounded-sm bg-white px-3.5 py-1.5 text-sm font-semibold text-black shadow-sm hover:bg-gray-200  ">
+        <button
+          onClick={() => setIsHistoryOpen(true)}
+          className="flex items-center mb-2 sm:mb-0 justify-center w-full gap-1 sm:w-auto border border-gray-200 rounded-sm bg-white px-3.5 py-1.5 text-sm font-semibold text-black shadow-sm hover:bg-gray-200  "
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -144,6 +145,13 @@ const PageHeader: React.FC = () => {
           </button>
         )}
       </div>
+      {isHistoryOpen && (
+        <History isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} />
+      )}
+
+      {showNotification && (
+        <Notification content={textNotification} result={resultNotification} />
+      )}
     </div>
   );
 };
