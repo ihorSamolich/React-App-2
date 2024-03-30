@@ -1,0 +1,60 @@
+version: "3.9"
+networks:
+  myAppNetwork:
+    driver: bridge
+
+services:
+  sqlPostgresDb:
+    container_name: postgresPV113
+    image: postgres:16.1
+    ports:
+      - "5113:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=myStongPdkdki934kIsassword123
+      - POSTGRES_DB=todolist
+    networks:
+      - myAppNetwork
+    volumes:
+      - /var/www/TodoList/webvolume/postgresql:/var/lib/postgresql/data  # Use the volume name msvol here
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+  appapi:
+    container_name: api_hn
+    build:
+      context: ./backend-taskboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - myAppNetwork
+    depends_on:
+      - sqlPostgresDb
+    volumes:
+      - /var/www/TodoList/webvolume/images:/app/images  # Use the volume name appvol here
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+
+  appclient:
+    container_name: client_hn
+    build:
+      context: ./front-taskboard
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" 
+    depends_on:
+      - appapi
+    volumes:
+      - /var/www/TodoList/webvolume/client:/app/client
+    networks:
+      - myAppNetwork
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
