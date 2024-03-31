@@ -7,5 +7,5 @@
 Copy the file docker-compose.yml, and in the folder with the file execute the following commands:
 ```sh
 docker-compose pull
-docker compose up -d.
+docker compose up -d
 ```
