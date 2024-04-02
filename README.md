@@ -1,4 +1,4 @@
-# TaskBoard
+# TaskBoard v.2
 
 ## Demo
 > [task.ihor.fun](https://task.ihor.fun)
