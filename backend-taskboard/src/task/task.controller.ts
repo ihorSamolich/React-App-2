@@ -13,14 +13,14 @@ import {
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskInterceptor } from './task.interceptor';
+//import { TaskInterceptor } from './task.interceptor';
 
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  @UseInterceptors(TaskInterceptor)
+  //@UseInterceptors(TaskInterceptor)
   @UsePipes(new ValidationPipe())
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.taskService.create(createTaskDto);
@@ -37,13 +37,13 @@ export class TaskController {
   }
 
   @Patch(':id')
-  @UseInterceptors(TaskInterceptor)
+  //@UseInterceptors(TaskInterceptor)
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.taskService.update(+id, updateTaskDto);
   }
 
   @Delete(':id')
-  @UseInterceptors(TaskInterceptor)
+  //@UseInterceptors(TaskInterceptor)
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
   }

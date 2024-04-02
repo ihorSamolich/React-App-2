@@ -1,12 +1,8 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { PrismaService } from '../prisma.service';
+import { handlePrismaError } from '../helpers/handlePrismaError';
 
 @Injectable()
 export class ListService {
@@ -18,16 +14,14 @@ export class ListService {
         data: createListDto,
       });
     } catch (error) {
-      throw this.handlePrismaError(
-        error,
-        'List name must be unique. Please check the entered list name and try again.',
-      );
+      throw handlePrismaError(error, 'List name must be unique. Please check the entered list name and try again.');
     }
   }
 
   async findAll() {
     try {
       return this.prisma.list.findMany({
+        orderBy: { id: 'asc' },
         include: {
           tasks: {
             include: {
@@ -38,7 +32,7 @@ export class ListService {
         },
       });
     } catch (error) {
-      throw this.handlePrismaError(error, 'Error fetch lists.');
+      throw handlePrismaError(error, 'Error fetch lists.');
     }
   }
 
@@ -96,18 +90,7 @@ export class ListService {
         },
       });
     } catch (error) {
-      throw this.handlePrismaError(error, 'Error fetching list.');
+      throw handlePrismaError(error, 'Error fetching list.');
     }
-  }
-
-  private handlePrismaError(error: any, message: string) {
-    console.error('Prisma error:', error);
-    return new HttpException(
-      {
-        status: HttpStatus.NOT_FOUND,
-        error: message,
-      },
-      HttpStatus.NOT_FOUND,
-    );
   }
 }
