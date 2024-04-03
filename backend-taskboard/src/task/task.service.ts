@@ -101,9 +101,8 @@ export class TaskService {
     }
 
     await this.historyService.createHistory('delete', id, existingTask.name);
-
     await this.prisma.task.delete({ where: { id } });
 
-    return `Task with id ${existingTask.id} deleted!`;
+    return existingTask;
   }
 }

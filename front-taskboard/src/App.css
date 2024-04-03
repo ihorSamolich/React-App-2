@@ -4,3 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+
+body{
+  background-color: #ff9fc0;
+  background-image: linear-gradient(43deg, #ff9fc0 0%, #db75d3 46%, #97fffe 100%);
+  min-height: 100vh;
+}

@@ -12,7 +12,7 @@ export const listApi = createApi({
       providesTags: ['Lists'],
     }),
     addList: builder.mutation({
-      query: (newList: { name: string }) => ({
+      query: (newList: { name: string; boardId: number }) => ({
         url: '/list',
         method: 'POST',
         body: newList,
@@ -38,9 +38,4 @@ export const listApi = createApi({
   }),
 });
 
-export const {
-  useGetListsQuery,
-  useUpdateListMutation,
-  useAddListMutation,
-  useDeleteListMutation,
-} = listApi;
+export const { useGetListsQuery, useUpdateListMutation, useAddListMutation, useDeleteListMutation } = listApi;
