@@ -1,5 +1,6 @@
 import React, { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import CancelIcon from '../../icons/CancelIcon.tsx';
 
 interface ModalProps {
   children: React.ReactNode;
@@ -38,18 +39,9 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:mx-20 sm:w-full sm:max-w-5xl">
                 <div className="bg-indigo-500 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <a className="cursor-pointer text-sm font-semibold text-white" onClick={() => setIsOpen(false)}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                  </a>
+                  <button className="cursor-pointer text-sm font-semibold text-white" onClick={() => setIsOpen(false)}>
+                    <CancelIcon />
+                  </button>
                 </div>
                 {children}
               </Dialog.Panel>

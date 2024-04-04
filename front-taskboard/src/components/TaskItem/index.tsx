@@ -80,12 +80,15 @@ const TaskItem: React.FC<ITask> = task => {
 
       {isTaskDetailOpen && (
         <Modal isOpen={isTaskDetailOpen} setIsOpen={setIsTaskDetailOpen}>
-          text
+          <TaskDetail task={task} />
         </Modal>
       )}
 
-      {/*{isTaskDetailOpen && <TaskDetail isOpen={isTaskDetailOpen} setIsOpen={setIsTaskDetailOpen} task={task} />}*/}
-      {/*{isTaskEditOpen && <TaskEdit isOpen={isTaskEditOpen} setIsOpen={setIsTaskEditOpen} task={task} />}*/}
+      {isTaskEditOpen && (
+        <Modal isOpen={isTaskEditOpen} setIsOpen={setIsTaskEditOpen}>
+          <TaskEdit task={task} setIsOpen={setIsTaskEditOpen} />
+        </Modal>
+      )}
     </>
   );
 };

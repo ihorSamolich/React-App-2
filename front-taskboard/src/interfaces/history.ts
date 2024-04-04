@@ -1,5 +1,9 @@
 export interface IHistory {
   id: number;
-  body: string;
+  action: string;
+  field: string | null;
   date: Date;
+  taskName: string;
+  newValue: string | null;
+  oldValue: string | null;
 }

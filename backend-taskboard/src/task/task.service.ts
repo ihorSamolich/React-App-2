@@ -74,7 +74,7 @@ export class TaskService {
 
     const changedFields: string[] = [];
     for (const key in updateTaskDto) {
-      if (existingTask[key as keyof typeof existingTask] !== res[key as keyof typeof res]) {
+      if (existingTask[key as keyof typeof existingTask] !== res[key as keyof typeof res] && key !== 'dueDate') {
         changedFields.push(key);
       }
     }

@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useGetHistoryQuery } from '../../services/history.ts';
-import { dateConvertWithTime } from '../../utils/dateConvertWithTime.ts';
+import HistoryItem from '../HistoryItem';
+import CancelIcon from '../icons/CancelIcon.tsx';
 
 interface HistoryProps {
   isOpen: boolean;
@@ -43,39 +44,14 @@ const History: React.FC<HistoryProps> = ({ isOpen, setIsOpen }) => {
                     <div>
                       <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
                         <div className="bg-indigo-500 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                          <a
-                            className="cursor-pointer text-sm font-semibold text-white"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-6 h-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </a>
+                          <button className="cursor-pointer text-sm font-semibold text-white" onClick={() => setIsOpen(false)}>
+                            <CancelIcon />
+                          </button>
                         </div>
                       </Dialog.Title>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {data?.map(item => (
-                        <ul key={item.id} className="px-4 py-1 list-disc ">
-                          <li>
-                            <p className="text-sm font-semibold">{item.body}</p>
-                            <p className="text-xs text-gray-500">
-                              {dateConvertWithTime(item.date)}
-                            </p>
-                          </li>
-                        </ul>
-                      ))}
+                      {data?.map(item => <HistoryItem key={item.id} item={item} />)}
                     </div>
                   </div>
                 </Dialog.Panel>
