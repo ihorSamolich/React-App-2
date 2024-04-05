@@ -4,4 +4,5 @@ export interface IList {
   id: number;
   name: string;
   tasks: ITask[];
+  boardId: number;
 }

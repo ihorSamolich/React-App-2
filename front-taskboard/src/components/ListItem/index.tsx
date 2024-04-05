@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TaskItem from '../TaskItem';
 import { IList } from '../../interfaces/list.ts';
-import { useDeleteListMutation, useUpdateListMutation } from '../../services/list.ts';
+import { useDeleteListMutation, useGetBoardListsQuery, useUpdateListMutation } from '../../services/list.ts';
 import Notification from '../Notification';
 import CreateTask from '../TaskCreate';
 import TextInput from '../ui/TextInput';
@@ -12,7 +12,8 @@ import SettingMenu from '../ui/SettingMenu';
 import Button from '../ui/Button';
 import CreateIcon from '../icons/CreateIcon.tsx';
 
-const ListItem: React.FC<IList> = ({ id, name, tasks }) => {
+const ListItem: React.FC<IList> = ({ id, boardId, name, tasks }) => {
+  const { data } = useGetBoardListsQuery(boardId);
   const [deleteList] = useDeleteListMutation();
   const [updateList] = useUpdateListMutation();
   const [isInputVisible, setIsInputVisible] = useState(false);
@@ -94,17 +95,17 @@ const ListItem: React.FC<IList> = ({ id, name, tasks }) => {
             <ActionButton onClick={() => setIsCreateTaskVisible(false)} type="CANCEL">
               <CancelIcon />
             </ActionButton>
-            <CreateTask onClose={() => setIsCreateTaskVisible(false)} />
+            <CreateTask boardId={boardId} onClose={() => setIsCreateTaskVisible(false)} />
           </>
         ) : (
-          <div className="w-full">
+          <div className="w-full flex items-center justify-center">
             <Button onClick={() => setIsCreateTaskVisible(true)} title="Add new card" style="TRANSPARENT">
               <CreateIcon />
             </Button>
           </div>
         )}
       </div>
-      <div className="w-full">{tasks?.map(task => <TaskItem key={task.id} {...task} />)}</div>
+      <div className="w-full">{tasks?.map(task => <TaskItem key={task.id} task={task} lists={data} />)}</div>
     </div>
   );
 };

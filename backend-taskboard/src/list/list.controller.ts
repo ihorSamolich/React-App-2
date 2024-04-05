@@ -24,7 +24,7 @@ export class ListController {
   @Get(':id')
   @ApiOperation({ tags: ['List'] })
   findOne(@Param('id') id: string) {
-    return this.listService.findOne(+id);
+    return this.listService.findByBoard(+id);
   }
 
   @Patch(':id')

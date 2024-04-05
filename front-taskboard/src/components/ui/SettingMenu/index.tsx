@@ -8,8 +8,8 @@ import DeleteIcon from '../../icons/DeleteIcon.tsx';
 
 interface ISettingsMenuProps {
   type: 'LIST' | 'TASK';
-  onEdit: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onEdit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onCreate?: () => void;
 }
 
@@ -34,7 +34,7 @@ const SettingsMenu: React.FC<ISettingsMenuProps> = ({ type, onEdit, onCreate, on
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute left-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
@@ -53,16 +53,16 @@ const SettingsMenu: React.FC<ISettingsMenuProps> = ({ type, onEdit, onCreate, on
             {type === 'LIST' && (
               <Menu.Item>
                 {({ active }) => (
-                  <div
+                  <button
                     onClick={onCreate}
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'flex gap-2 items-center  px-4 py-2 text-sm',
+                      active ? 'bg-gray-100 text-green-500' : 'text-green-600',
+                      'flex gap-2 items-center w-full px-4 py-2 text-sm',
                     )}
                   >
                     <CreateIcon />
-                    Add new card
-                  </div>
+                    Add
+                  </button>
                 )}
               </Menu.Item>
             )}

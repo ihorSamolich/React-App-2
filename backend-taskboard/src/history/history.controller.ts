@@ -6,10 +6,10 @@ import { ApiOperation } from '@nestjs/swagger';
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) {}
 
-  @Get()
+  @Get('board/:boardId')
   @ApiOperation({ tags: ['History'] })
-  findAll() {
-    return this.historyService.findAll();
+  findAllForBoard(@Param('boardId') boardId: number) {
+    return this.historyService.findAllForBoard(boardId);
   }
 
   @Get(':id')

@@ -5,12 +5,15 @@ import HistoryItem from '../HistoryItem';
 import CancelIcon from '../icons/CancelIcon.tsx';
 
 interface HistoryProps {
+  boardId: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-const History: React.FC<HistoryProps> = ({ isOpen, setIsOpen }) => {
-  const { data } = useGetHistoryQuery();
+const History: React.FC<HistoryProps> = ({ isOpen, setIsOpen, boardId }) => {
+  const { data } = useGetHistoryQuery(boardId);
+
+  console.log(boardId);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>

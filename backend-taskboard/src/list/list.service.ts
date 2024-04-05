@@ -36,12 +36,25 @@ export class ListService {
     }
   }
 
-  async findOne(id: number) {
-    const list = await this.findListById(id);
-    if (!list) {
-      throw new NotFoundException();
+  async findByBoard(id: number) {
+    try {
+      return await this.prisma.list.findMany({
+        where: {
+          boardId: id,
+        },
+        orderBy: { id: 'asc' },
+        include: {
+          tasks: {
+            include: {
+              priority: true,
+              list: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw handlePrismaError(error, 'Error fetching list.');
     }
-    return list;
   }
 
   async update(id: number, updateListDto: UpdateListDto) {

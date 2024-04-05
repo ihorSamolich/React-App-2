@@ -7,8 +7,8 @@ export const historyApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/api/` }),
   tagTypes: ['History'],
   endpoints: builder => ({
-    getHistory: builder.query<IHistory[], void>({
-      query: () => '/history',
+    getHistory: builder.query<IHistory[], number>({
+      query: boardId => `/history/board/${boardId}`,
       providesTags: ['History'],
     }),
 

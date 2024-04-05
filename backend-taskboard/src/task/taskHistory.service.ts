@@ -5,8 +5,6 @@ export class TaskHistoryService {
   constructor(private prisma: PrismaService) {}
 
   async createHistory(action: string, taskId: number, taskName: string, field?: string, newValue?: string, oldValue?: string) {
-    console.log(field);
-    console.log(newValue);
     if (field === 'priorityId') {
       field = 'priority';
 

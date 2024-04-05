@@ -19,7 +19,7 @@ export class BoardService {
 
   async findAll() {
     try {
-      return await this.prisma.board.findMany();
+      return await this.prisma.board.findMany({ orderBy: { id: 'asc' } });
     } catch (error) {
       throw handlePrismaError(error, 'Failed to fetch boards.');
     }
@@ -53,6 +53,20 @@ export class BoardService {
 
   async remove(id: number) {
     try {
+      await this.prisma.task.deleteMany({
+        where: {
+          list: {
+            boardId: id,
+          },
+        },
+      });
+
+      await this.prisma.list.deleteMany({
+        where: {
+          boardId: id,
+        },
+      });
+
       return await this.prisma.board.delete({ where: { id } });
     } catch (error) {
       throw handlePrismaError(error, `Failed to delete board with id ${id}.`);

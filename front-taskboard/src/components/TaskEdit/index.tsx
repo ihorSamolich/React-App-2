@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ITask, IUpdateTask } from '../../interfaces/task.ts';
-import { useGetListsQuery } from '../../services/list.ts';
+import { useGetBoardListsQuery } from '../../services/list.ts';
 import { useGetPrioritiesQuery } from '../../services/priority.ts';
 import { formatISODateForInput } from '../../utils/dateForInput.ts';
 import { useUpdateTaskMutation } from '../../services/task.ts';
@@ -11,13 +11,11 @@ import CancelIcon from '../icons/CancelIcon.tsx';
 
 interface TaskDetailProps {
   task: ITask;
-  // isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskEdit: React.FC<TaskDetailProps> = ({ task, setIsOpen }) => {
-  // const cancelButtonRef = useRef(null);
-  const { data: lists } = useGetListsQuery();
+  const { data: lists } = useGetBoardListsQuery(task.list.boardId);
   const { data: priorities } = useGetPrioritiesQuery();
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [textNotification, setTextNotification] = useState<string>('');

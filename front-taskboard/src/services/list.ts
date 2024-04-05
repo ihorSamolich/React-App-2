@@ -11,6 +11,12 @@ export const listApi = createApi({
       query: () => '/list',
       providesTags: ['Lists'],
     }),
+
+    getBoardLists: builder.query<IList[], number>({
+      query: id => `/list/${id}`,
+      providesTags: ['Lists'],
+    }),
+
     addList: builder.mutation({
       query: (newList: { name: string; boardId: number }) => ({
         url: '/list',
@@ -38,4 +44,5 @@ export const listApi = createApi({
   }),
 });
 
-export const { useGetListsQuery, useUpdateListMutation, useAddListMutation, useDeleteListMutation } = listApi;
+export const { useGetBoardListsQuery, useGetListsQuery, useUpdateListMutation, useAddListMutation, useDeleteListMutation } =
+  listApi;

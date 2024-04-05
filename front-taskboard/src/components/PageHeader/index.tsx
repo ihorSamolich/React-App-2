@@ -9,8 +9,15 @@ import ActionButton from '../ui/ActionButton';
 import ConfirmIcon from '../icons/ConfirmIcon.tsx';
 import CancelIcon from '../icons/CancelIcon.tsx';
 import TextInput from '../ui/TextInput';
+import { useGetBoardsQuery } from '../../services/board.ts';
+import BoardItem from '../BoardItem';
 
-const PageHeader: React.FC = () => {
+interface IPageHeaderProps {
+  currentBoard: number;
+  setCurrentBoard: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const PageHeader: React.FC<IPageHeaderProps> = ({ currentBoard, setCurrentBoard }) => {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
@@ -21,11 +28,23 @@ const PageHeader: React.FC = () => {
   const [addList] = useAddListMutation();
   const inputNameRef = useRef<HTMLInputElement>(null);
 
+  const { data } = useGetBoardsQuery();
+
   useEffect(() => {
     if (isInputVisible) {
       inputNameRef.current?.focus();
     }
   }, [isInputVisible]);
+
+  useEffect(() => {
+    if (currentBoard === 0 && data && data.length > 0) {
+      setCurrentBoard(data[0].id);
+    }
+  }, [data, setCurrentBoard]);
+  const handleBoardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentBoard(Number(event.target.value));
+    localStorage.setItem('currentBoard', event.target.value);
+  };
 
   const handleCreateList = async () => {
     if (inputNameRef.current?.value) {
@@ -33,7 +52,7 @@ const PageHeader: React.FC = () => {
 
       const result = await addList({
         name: inputNameRef.current.value,
-        boardId: 1,
+        boardId: currentBoard,
       });
 
       if ('data' in result) {
@@ -57,8 +76,27 @@ const PageHeader: React.FC = () => {
 
   return (
     <div className="sm:flex items-center justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold tracking-tight mb-2 sm:mb-0 text-gray-900">My Task Board</h1>
+      <BoardItem board={data?.find(board => board.id === currentBoard)} setCurrentBoard={setCurrentBoard} />
       <div className="sm:flex justify-center sm:w-auto gap-2 ">
+        <div>
+          <div className="relative">
+            <select
+              onChange={handleBoardChange}
+              value="0"
+              className=" flex items-center outline-0 bg-orange-500 mb-2 sm:mb-0 justify-center w-full gap-1 sm:w-auto text-black rounded-sm px-3.5 py-1.5 text-sm font-semibold"
+            >
+              <option value="0" disabled>
+                &#9660; Change board
+              </option>
+              {data?.map(item => (
+                <option key={item.id} value={item.id}>
+                  {`${item.name} `}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         <Button title="History" onClick={() => setIsHistoryOpen(true)}>
           <HistoryIcon />
         </Button>
@@ -79,7 +117,7 @@ const PageHeader: React.FC = () => {
           </Button>
         )}
       </div>
-      {isHistoryOpen && <History isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} />}
+      {isHistoryOpen && <History isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} boardId={currentBoard} />}
       {showNotification && <Notification content={textNotification} result={resultNotification} />}
     </div>
   );

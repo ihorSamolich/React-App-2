@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { useGetListsQuery } from '../../services/list.ts';
+import { useGetBoardListsQuery } from '../../services/list.ts';
 import { useGetPrioritiesQuery } from '../../services/priority.ts';
 import { ICreateTask } from '../../interfaces/task.ts';
 import { useAddTaskMutation } from '../../services/task.ts';
@@ -9,10 +9,11 @@ import CreateIcon from '../icons/CreateIcon.tsx';
 
 interface ICreateTaskProps {
   onClose: () => void;
+  boardId: number;
 }
 
-const CreateTask: React.FC<ICreateTaskProps> = ({ onClose }) => {
-  const { data: lists } = useGetListsQuery();
+const CreateTask: React.FC<ICreateTaskProps> = ({ onClose, boardId }) => {
+  const { data: lists } = useGetBoardListsQuery(boardId);
   const { data: priorities } = useGetPrioritiesQuery();
   const [formData, setFormData] = useState<ICreateTask>(initialFormData);
   const [showNotification, setShowNotification] = useState<boolean>(false);

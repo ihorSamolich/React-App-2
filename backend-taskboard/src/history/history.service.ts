@@ -5,8 +5,16 @@ import { PrismaService } from '../prisma.service';
 export class HistoryService {
   constructor(private prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.history.findMany();
+  findAllForBoard(boardId: number) {
+    return this.prisma.history.findMany({
+      where: {
+        task: {
+          list: {
+            boardId: Number(boardId),
+          },
+        },
+      },
+    });
   }
 
   findOne(id: number) {

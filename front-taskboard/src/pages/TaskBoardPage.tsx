@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ListGrid from '../components/ListsGrid';
 import PageHeader from '../components/PageHeader';
 
 const TaskBoardPage: React.FC = () => {
+  const [currentBoard, setCurrentBoard] = useState<number>(Number(localStorage.getItem('currentBoard')) || 0);
+
   return (
     <>
       <header className="shadow">
-        <PageHeader />
+        <PageHeader currentBoard={currentBoard} setCurrentBoard={setCurrentBoard} />
       </header>
       <main>
-        <ListGrid />
+        <ListGrid boardId={currentBoard} />
       </main>
     </>
   );

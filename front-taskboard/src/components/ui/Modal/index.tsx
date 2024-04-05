@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:mx-20 sm:w-full sm:max-w-5xl">
                 <div className="bg-indigo-500 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button className="cursor-pointer text-sm font-semibold text-white" onClick={() => setIsOpen(false)}>
+                  <button className="cursor-pointer text-sm font-semibold text-white outline-0" onClick={() => setIsOpen(false)}>
                     <CancelIcon />
                   </button>
                 </div>

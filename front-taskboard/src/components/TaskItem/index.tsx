@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
 import { ITask } from '../../interfaces/task.ts';
-import { useGetListsQuery } from '../../services/list.ts';
 import { useDeleteTaskMutation, useMoveTaskMutation } from '../../services/task.ts';
 import TaskEdit from '../TaskEdit';
 import SettingMenu from '../ui/SettingMenu';
@@ -8,10 +7,15 @@ import CalendarIcon from '../icons/CalendarIcon.tsx';
 import TaskDetail from '../TaskDetail';
 import { dateConvert } from '../../utils/dateConvert.ts';
 import Modal from '../ui/Modal';
+import { IList } from '../../interfaces/list.ts';
 
-const TaskItem: React.FC<ITask> = task => {
+interface ITaskItemProps {
+  task: ITask;
+  lists?: IList[];
+}
+
+const TaskItem: React.FC<ITaskItemProps> = ({ task, lists }) => {
   const { id, name, description, priority, list, dueDate } = task;
-  const { data } = useGetListsQuery();
   const [moveTask] = useMoveTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const [isTaskDetailOpen, setIsTaskDetailOpen] = useState(false);
@@ -34,7 +38,7 @@ const TaskItem: React.FC<ITask> = task => {
     <>
       <article
         onClick={() => setIsTaskDetailOpen(true)}
-        className="w-full rounded-md border-gray-700 border p-2 flex-col hover:border-blue-600 cursor-pointer"
+        className="w-full mb-1 rounded-md border-gray-700 border p-2 flex-col hover:border-blue-600 cursor-pointer"
       >
         <div className="w-full flex items-center justify-between">
           <h1 className="text-sm text-black font-bold">{name}</h1>
@@ -67,7 +71,7 @@ const TaskItem: React.FC<ITask> = task => {
             <option value="0" disabled>
               Move to:
             </option>
-            {data
+            {lists
               ?.filter(item => item.id !== list.id)
               .map(list => (
                 <option key={list.id} value={list.id}>
