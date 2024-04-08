@@ -15,7 +15,6 @@ interface IBoardItemProps {
 
 const BoardItem: React.FC<IBoardItemProps> = ({ board, setCurrentBoard }) => {
   const [isInputVisible, setIsInputVisible] = useState(false);
-
   const [isCreateVisible, setIsCreateVisible] = useState(false);
 
   const inputNameRef = useRef<HTMLInputElement>(null);

@@ -88,7 +88,6 @@ const ListItem: React.FC<IList> = ({ id, boardId, name, tasks }) => {
           />
         </div>
       </div>
-
       <div className="w-full rounded-md border-black border border-dashed">
         {isCreateTaskVisible ? (
           <>

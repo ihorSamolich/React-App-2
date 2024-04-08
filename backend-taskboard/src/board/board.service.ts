@@ -3,11 +3,17 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { PrismaService } from '../prisma.service';
 import { handlePrismaError } from '../helpers/handlePrismaError';
+import { validate } from 'class-validator';
+
 @Injectable()
 export class BoardService {
   constructor(private prisma: PrismaService) {}
 
   async create(createBoardDto: CreateBoardDto) {
+    if (!createBoardDto.name) {
+      throw handlePrismaError('Name length must be not empty!', 'Failed to create board.');
+    }
+
     try {
       return await this.prisma.board.create({
         data: createBoardDto,
@@ -41,6 +47,11 @@ export class BoardService {
   }
 
   async update(id: number, updateBoardDto: UpdateBoardDto) {
+    const errors = await validate(UpdateBoardDto);
+    if (errors.length > 0) {
+      throw handlePrismaError('Validation error', `Validation failed: ${errors.join(', ')}`);
+    }
+
     try {
       return await this.prisma.board.update({
         where: { id },
